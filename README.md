@@ -89,8 +89,6 @@ isEmail('invalid@', { details: true });
 // Returns: { valid: false, errors: ['Domain cannot be empty'], ... }
 ```
 
-[📖 Full Email Documentation](docs/EMAIL.md)
-
 ---
 
 #### 🔑 Password Validation
@@ -132,8 +130,6 @@ isPassword('password123', {
 - ✅ Configurable complexity requirements
 - ✅ Length validation
 - ✅ Character type requirements
-
-[📖 Full Password Documentation](docs/PASSWORD.md)
 
 ---
 
@@ -179,8 +175,6 @@ const result = isUsername('123user', { details: true });
 - 📱 Social media handles
 - 💼 Professional networks
 - 🌐 Forums and communities
-
-[📖 Full Username Documentation](docs/USERNAME.md)
 
 ---
 
@@ -422,7 +416,7 @@ if (!usernameResult.valid) return usernameResult.errors;
 
 validauth is actively developed and maintained. We're working on adding more validators and features based on community feedback.
 
-**Current version:** 1.2.1  
+**Current version:** 1.2.2  
 **Status:** ✅ Stable
 
 ### Roadmap
@@ -516,109 +510,11 @@ See [LICENSE](MIT) for details.
 
 - 📧 Email: codeadiksuu@gmail.com
 - 💬 Issues: [GitHub Issues](https://github.com/Adiksuu/validauth/issues)
-<!-- - 📖 Documentation: [GitHub Wiki](https://github.com/Adiksuu/validauth/wiki) -->
-
-## 🔥 Quick Links
-
-<!-- - [📖 Full Documentation](https://github.com/Adiksuu/validauth/wiki) -->
-- [📝 Email Validation Guide](docs/EMAIL.md)
-- [🔑 Password Validation & Password Strength Guide](docs/PASSWORD.md)
-- [👤 Username Validation Guide](docs/USERNAME.md)
-<!-- - [💪 Password Strength Guide](docs/PASSWORD_STRENGTH.md) -->
-<!-- - [🎯 Examples & Recipes](examples/) -->
-<!-- - [📋 Changelog](CHANGELOG.md) -->
-<!-- - [🤝 Contributing Guide](CONTRIBUTING.md) -->
-
----
+- [📖 Full Documentation](https://validauth.netlify.app)
 
 **Made with ❤️ by [Adiksuu]**
-
 ⭐ Star this repo if you find it useful!
-
-<!-- ## 💬 Testimonials
-
-> "Finally, a validation library that just makes sense for auth flows!" - Developer
-
-> "The detailed error messages saved me hours of debugging." - Another Developer
-
-> "Common password checking out of the box? Amazing!" - Yet Another Developer -->
-
-<!-- ## 📈 Stats
-
-- ⭐ Stars on GitHub
-- 📦 Downloads per week
-- 🐛 Issues closed
-- 🎉 Contributors -->
-
-<!-- ---
-
-## Example Projects
-
-Check out these example implementations:
-
-- [React Registration Form](examples/react-registration)
-- [Express API with validauth](examples/express-api)
-- [Vue 3 Login Form](examples/vue-login)
-- [Vanilla JS Examples](examples/vanilla-js) -->
-
-## FAQ
-
-**Q: Can I use this in production?**  
-A: Yes! validauth is stable and well-tested.
-
-**Q: Does it work with TypeScript?**  
-A: TypeScript definitions are coming soon. For now, you can use it with `any` types.
-
-**Q: How do I add custom validation rules?**  
-A: You can combine validauth with your own validation logic, or open an issue to request a new feature.
-
-**Q: Is the common password list up to date?**  
-A: Yes, we regularly update it based on the latest security research.
-
-**Q: Can I use this on the backend?**  
-A: Absolutely! validauth works in both browser and Node.js environments.
-
-**Q: How often is the package updated?**  
-A: We aim for regular updates with new features and security improvements.
-
-**Q: Can I contribute?**  
-A: Yes! We welcome contributions. Just send a message on my email
 
 ## Security
 
 If you discover a security vulnerability, please email codeadiksuu@gmail.com. All security vulnerabilities will be promptly addressed.
-
-## Changelog
-
-### [1.2.1] - 23.11.2025
-
-#### Added
-- Optimized the package from 1.2MB to 50kb (unpacked)
-
-### [1.2.0] - 23.11.2025
-
-#### Added
-- Username validation with comprehensive options
-- Blocked/reserved username checking
-
-### [1.1.2] - 23.11.2025
-
-#### Added
-- Added browser support
-
-### [1.1.0-1.1.1] - 23.11.2025
-
-#### Added
-- Password validation with security checks
-- Common password detection (1,000+ passwords)
-- Password strength calculator
-
-### [1.0.0] - 23.11.2025
-
-#### Added
-- Initial release
-- Email validation with full options support
-- Detailed error messages
-- Zero dependencies
-
-<!-- [See full changelog](CHANGELOG.md) -->

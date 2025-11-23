@@ -266,3 +266,51 @@ export function getPasswordStrength(password, options = {}) {
     }
     return strength;
 }
+
+/**
+ * Calculates the strength of a password.
+ * @param {string} password - The password to evaluate.
+ * @param {string} confirmPassword - The confirmation password to compare.
+ * @param {Object} options - Validation options.
+ * @param {boolean} options.details - Whether to return detailed information.
+ * @returns {string|Object} true | false or an object with details
+ */
+export function isPasswordMatch(password, confirmPassword, options = {}) {
+    // Default options
+    const defaults = {
+        details: false,
+    }
+    const opts = { ...defaults, ...options };
+    const errors = [];
+
+    // Basic validation.
+    if (typeof password !== "string" || typeof confirmPassword !== "string") {
+        if (opts.details) {
+            return {
+                match: false,
+                errors: ["Both passwords must be strings"],
+            };
+        }
+        return false;
+    }
+    if (password !== confirmPassword) {
+        if (opts.details) {
+            return {
+                match: false,
+                errors: ["Passwords do not match"],
+            };
+        }
+        return false;
+    }
+
+    // Return value
+    const isValid = errors.length === 0;
+
+    if (opts.details) {
+        return {
+            match: isValid,
+            errors: errors.length > 0 ? errors : null,
+        };
+    }
+    return isValid;
+}
