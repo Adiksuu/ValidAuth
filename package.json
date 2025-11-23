@@ -1,0 +1,23 @@
+{
+  "name": "validauth",
+  "version": "1.0.0",
+  "description": "Authentication validators for email, password, username and more",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node ."
+  },
+  "keywords": [
+    "auth",
+    "validation",
+    "validator",
+    "email",
+    "password",
+    "authentication"
+  ],
+  "author": "adiksuu",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adiksuu/validauth.git"
+  }
+}
