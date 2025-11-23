@@ -1,8 +1,14 @@
 {
   "name": "validauth",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Authentication validators for email, password, username and more",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "node ."
   },

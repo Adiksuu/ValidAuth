@@ -234,7 +234,7 @@ console.log(isPassword("Pass$word1")); // true
 
 ### Option: `forbidCommonPasswords`
 
-Checks password against a database of 10,000+ common and leaked passwords.
+Checks password against a database of 1,000+ common and leaked passwords.
 
 ```javascript
 // Default: true (common passwords blocked)
@@ -678,7 +678,7 @@ Overly lenient settings:
 
 ## Common Password Database
 
-The library includes a curated list of 10,000+ common and leaked passwords, including:
+The library includes a curated list of 1,000+ common and leaked passwords, including:
 
 -   Simple sequences (`123456`, `abcdef`)
 -   Common words (`password`, `welcome`)

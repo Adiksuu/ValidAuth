@@ -128,7 +128,7 @@ isPassword('password123', {
 ```
 
 **Security Features:**
-- ✅ Checks against 10,000+ common/leaked passwords
+- ✅ Checks against 1,000+ common/leaked passwords
 - ✅ Configurable complexity requirements
 - ✅ Length validation
 - ✅ Character type requirements
@@ -422,7 +422,7 @@ if (!usernameResult.valid) return usernameResult.errors;
 
 validauth is actively developed and maintained. We're working on adding more validators and features based on community feedback.
 
-**Current version:** 1.2.0  
+**Current version:** 1.2.1  
 **Status:** ✅ Stable
 
 ### Roadmap
@@ -470,7 +470,7 @@ node test.js
 
 | Feature | validauth | validator.js | joi | yup |
 |---------|-----------|--------------|-----|-----|
-| Size | ~15KB | ~100KB | ~150KB | ~80KB |
+| Size | ~14KB | ~100KB | ~150KB | ~80KB |
 | Dependencies | 0 | 0 | Many | Many |
 | Auth-focused | ✅ | ❌ | ❌ | ❌ |
 | Common password check | ✅ | ❌ | ❌ | ❌ |
@@ -481,14 +481,14 @@ node test.js
 
 ## 📦 Bundle Size
 
-- **validauth**: ~15KB minified, ~5KB gzipped
+- **validauth**: ~14KB minified, ~5KB gzipped
 - **Zero dependencies**: No bloat from external packages
 - **Tree-shakeable**: Import only what you need
 ```javascript
 // Import only what you need
-import { isEmail } from 'validauth'; // ~3KB
-import { isPassword } from 'validauth'; // ~8KB
-import { isUsername } from 'validauth'; // ~2KB
+import { isEmail } from 'validauth'; // ~4.4KB
+import { isPassword } from 'validauth'; // ~6KB
+import { isUsername } from 'validauth'; // ~3.6KB
 ```
 
 ## 🌍 Browser Support
@@ -590,6 +590,11 @@ If you discover a security vulnerability, please email codeadiksuu@gmail.com. Al
 
 ## Changelog
 
+### [1.2.1] - 23.11.2025
+
+#### Added
+- Optimized the package from 1.2MB to 50kb (unpacked)
+
 ### [1.2.0] - 23.11.2025
 
 #### Added
@@ -605,7 +610,7 @@ If you discover a security vulnerability, please email codeadiksuu@gmail.com. Al
 
 #### Added
 - Password validation with security checks
-- Common password detection (10,000+ passwords)
+- Common password detection (1,000+ passwords)
 - Password strength calculator
 
 ### [1.0.0] - 23.11.2025
