@@ -12,16 +12,7 @@
  * @param {boolean} options.details - Whether to return detailed information.
  * @returns {boolean|Object} true/false or an object with details
  */
-import fs from "fs";
-
-const commonPasswords = fs
-    .readFileSync(
-        new URL("../utils/commonPasswords.txt", import.meta.url),
-        "utf8"
-    )
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean);
+import { commonPasswords } from "../utils/commonPasswords.js";
 export function isPassword(password, options = {}) {
     // Default options
     const defaults = {
@@ -124,7 +115,7 @@ export function isPassword(password, options = {}) {
     }
 
     // Check if password contains common passwords
-    if (opts.forbidCommonPasswords && commonPasswords.includes(password)) {
+    if (opts.forbidCommonPasswords && commonPasswords.has(password)) {
         if (opts.details) {
             return {
                 valid: false,
@@ -175,7 +166,7 @@ export function getPasswordStrength(password, options = {}) {
     }
 
     // Common password penalty - set score to 0 if common password
-    if (commonPasswords.includes(password)) {
+    if (commonPasswords.has(password)) {
         score = 0;
     } else {
         // Length scoring (0-40 points)
