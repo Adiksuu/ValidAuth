@@ -135,6 +135,7 @@ console.log(result);
 - ✅ Configurable complexity requirements
 - ✅ Length validation (prevent too short or too long passwords)
 - ✅ Character type requirements (uppercase, lowercase, numbers, symbols)
+- ✅ Displaying password strength
 
 [📖 Full Password Documentation](docs/PASSWORD.md)
 
@@ -294,7 +295,7 @@ validauth is actively developed and maintained. We're working on adding more val
 
 - [x] Email validation
 - [x] Password validation
-- [ ] Password strength calculator
+- [x] Password strength calculator
 - [ ] Username validation
 - [ ] Phone number validation
 - [ ] PIN/OTP validation
