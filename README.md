@@ -28,16 +28,22 @@ npm install validauth
 
 ### Basic Usage
 ```javascript
-const { isEmail } = require('validauth');
+const { isEmail, isPassword } = require('validauth');
 
 // Simple email validation
 if (isEmail('user@example.com')) {
   console.log('Valid email!');
 }
 
+// Password validation with default rules
+if (isPassword('MyP@ssw0rd123')) {
+  console.log('Strong password!');
+}
+
 // Advanced validation with options
-const result = isEmail('user@example.com', {
-  blockedDomains: ['tempmail.com'],
+const result = isPassword('weak', {
+  minLength: 10,
+  requireSymbols: true,
   details: true
 });
 
@@ -79,21 +85,72 @@ isEmail('invalid@', { details: true });
 // Returns: { valid: false, errors: ['Domain cannot be empty'], ... }
 ```
 
+[📖 Full Email Documentation](docs/EMAIL.md)
+
+#### 🔑 Password Validation
+
+Validate password strength with comprehensive security checks:
+```javascript
+isPassword(password, {
+  minLength: 8,                    // Minimum password length
+  maxLength: 128,                  // Maximum password length
+  requireUppercase: true,          // Require uppercase letters
+  requireLowercase: true,          // Require lowercase letters
+  requireNumbers: true,            // Require numbers
+  requireSymbols: true,            // Require special characters
+  forbidCommonPasswords: true,     // Block common/leaked passwords
+  details: false                   // Get detailed error messages
+});
+```
+
+**Examples:**
+```javascript
+// Default validation (strong requirements)
+isPassword('MyP@ssw0rd123'); // true
+isPassword('weak'); // false
+
+// Custom requirements for less strict validation
+isPassword('SimplyPassword123', {
+  requireSymbols: false,
+  minLength: 6
+}); // true
+
+// Block common passwords
+isPassword('password123', {
+  forbidCommonPasswords: true
+}); // false
+
+// Get detailed feedback
+const result = isPassword('short', { details: true });
+console.log(result);
+// {
+//   valid: false,
+//   errors: ['Password must be at least 8 characters long'],
+//   password: 'short'
+// }
+```
+
+**Security Features:**
+- ✅ Checks against 10,000+ common/leaked passwords
+- ✅ Configurable complexity requirements
+- ✅ Length validation (prevent too short or too long passwords)
+- ✅ Character type requirements (uppercase, lowercase, numbers, symbols)
+
+[📖 Full Password Documentation](docs/PASSWORD.md)
+
 ### 🔜 Coming Soon
 
-- 🔑 **Password Validation** - Strength checking, common password detection
 - 👤 **Username Validation** - Length, character, and reserved name checks
 - 📱 **Phone Number Validation** - International format support
 - 🔢 **PIN/OTP Validation** - Verification code validation
-- 🛡️ **Security Helpers** - Breach detection, entropy calculation
-
-<!-- [See full documentation →](https://github.com/yourusername/validauth/wiki) -->
+- 🛡️ **Password Strength Calculator** - Score passwords from weak to very strong
+- 🔍 **Breach Detection** - Check against Have I Been Pwned database
 
 ## 💡 Use Cases
 
 ### Registration Forms
 ```javascript
-const { isEmail } = require('validauth');
+const { isEmail, isPassword } = require('validauth');
 
 function validateRegistration(email, password) {
   // Validate email
@@ -104,19 +161,62 @@ function validateRegistration(email, password) {
   });
   
   if (!emailResult.valid) {
-    return { success: false, errors: emailResult.errors };
+    return { success: false, field: 'email', errors: emailResult.errors };
   }
   
-  // More validation...
+  // Validate password
+  const passwordResult = isPassword(password, {
+    minLength: 10,
+    requireSymbols: true,
+    forbidCommonPasswords: true,
+    details: true
+  });
+  
+  if (!passwordResult.valid) {
+    return { success: false, field: 'password', errors: passwordResult.errors };
+  }
+  
   return { success: true };
 }
 ```
 
 ### Login Forms
 ```javascript
-function validateLogin(email) {
+function validateLogin(email, password) {
   // Quick validation without strict rules
-  return isEmail(email);
+  const emailValid = isEmail(email);
+  const passwordValid = isPassword(password, {
+    minLength: 1, // Just check if it exists
+    requireUppercase: false,
+    requireLowercase: false,
+    requireNumbers: false,
+    requireSymbols: false,
+    forbidCommonPasswords: false
+  });
+  
+  return emailValid && passwordValid;
+}
+```
+
+### Password Reset
+```javascript
+function validateNewPassword(newPassword, oldPassword) {
+  // Ensure new password meets requirements
+  const result = isPassword(newPassword, {
+    minLength: 12,
+    requireSymbols: true,
+    details: true
+  });
+  
+  // Optionally check if new password is different from old
+  if (result.valid && newPassword === oldPassword) {
+    return {
+      valid: false,
+      errors: ['New password must be different from old password']
+    };
+  }
+  
+  return result;
 }
 ```
 
@@ -151,22 +251,35 @@ if (!emailRegex.test(email)) {
   return 'Invalid email';
 }
 
+// Manual password checks
+if (password.length < 8) return 'Too short';
+if (!/[A-Z]/.test(password)) return 'Need uppercase';
+if (!/[0-9]/.test(password)) return 'Need numbers';
+// ... and so on
+
+// No protection against common passwords
 // No customization, no detailed errors
-// Security checks done manually
-if (email.includes('tempmail.com')) {
-  return 'Temporary emails not allowed';
-}
 ```
 
 ### After validauth:
 ```javascript
-const result = isEmail(email, {
+const emailResult = isEmail(email, {
   blockedDomains: ['tempmail.com'],
   details: true
 });
 
-if (!result.valid) {
-  return result.errors; // Clear, detailed error messages
+const passwordResult = isPassword(password, {
+  minLength: 10,
+  forbidCommonPasswords: true,
+  details: true
+});
+
+if (!emailResult.valid) {
+  return emailResult.errors; // Clear, detailed error messages
+}
+
+if (!passwordResult.valid) {
+  return passwordResult.errors; // Comprehensive security feedback
 }
 ```
 
@@ -174,15 +287,17 @@ if (!result.valid) {
 
 validauth is actively developed and maintained. We're working on adding more validators and features based on community feedback.
 
-**Current version:** 1.0.0  
+**Current version:** 1.1.0  
 **Status:** ✅ Stable
 
 ### Roadmap
 
 - [x] Email validation
-- [ ] Password validation
+- [x] Password validation
+- [ ] Password strength calculator
 - [ ] Username validation
 - [ ] Phone number validation
+- [ ] PIN/OTP validation
 - [ ] TypeScript definitions
 - [ ] React hooks
 - [ ] Vue composables
@@ -196,8 +311,6 @@ Contributions are welcome! Whether it's:
 - 💡 Feature requests
 - 📖 Documentation improvements
 - 🔧 Code contributions
-
-<!-- Please read our [Contributing Guide](CONTRIBUTING.md) to get started. -->
 
 ### Development Setup
 ```bash
@@ -225,6 +338,7 @@ See [LICENSE](MIT) for details.
 
 - Inspired by the need for better authentication validation in modern web apps
 - Built with ❤️ for the JavaScript community
+- Common password list curated from security research and breach databases
 
 ## 📞 Support
 

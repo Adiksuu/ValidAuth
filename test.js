@@ -1,9 +1,7 @@
-import { isEmail } from './index.js';
+import { isPassword } from "./src/validators/password.js";
 
-console.log('Test 1:', isEmail('user@example.com')); // true
-console.log('Test 2:', isEmail('invalid@')); // false
-console.log('Test 3:', isEmail('user+tag@example.com')); // true
-console.log('Test 4:', isEmail('user@example')); // false (brak TLD)
+console.log(isPassword("Password123!")); // true
+console.log(isPassword("Password123!")); // false
+console.log(isPassword("Password123!")); // false
 
-console.log('\nTest with details:');
-console.log(isEmail('invalid@', { details: true }));
+console.log(isPassword("Qwerty123!", { details: true }));
