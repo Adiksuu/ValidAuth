@@ -1,250 +1,238 @@
-# ValidAuth package
+# 🔐 validauth
 
-Authentication validators for email, password, username and more.
+> Lightweight, powerful authentication validators for JavaScript applications
 
-## Installation
+[![npm version](https://img.shields.io/npm/v/validauth.svg)](https://www.npmjs.com/package/validauth)
+[![npm downloads](https://img.shields.io/npm/dm/validauth.svg)](https://www.npmjs.com/package/validauth)
+[![license](https://img.shields.io/npm/l/validauth.svg)](https://github.com/adiksuu/validauth/blob/main/LICENSE)
+
+**validauth** is a modern JavaScript library that provides robust validators for authentication forms. Built with security and developer experience in mind, it helps you validate emails, passwords, usernames, and more with just a few lines of code.
+
+## ✨ Features
+
+- 🎯 **Focused on Auth** - Specialized validators for authentication flows
+- 🪶 **Lightweight** - Zero dependencies, minimal footprint
+- 🔒 **Security-first** - Built-in checks for common vulnerabilities
+- ⚙️ **Highly Configurable** - Customize validation rules to fit your needs
+- 📦 **Easy to Use** - Simple, intuitive API
+- 🌍 **Framework Agnostic** - Works with React, Vue, Angular, vanilla JS, and more
+- 📝 **TypeScript Ready** - Full TypeScript support (coming soon)
+- 🧪 **Well Tested** - Comprehensive test coverage
+
+## 🚀 Quick Start
+
+### Installation
 ```bash
 npm install validauth
 ```
 
-## Usage
-
-### Email Validation
-
-#### Basic validation
+### Basic Usage
 ```javascript
 const { isEmail } = require('validauth');
 
-console.log(isEmail('user@example.com')); // true
-console.log(isEmail('invalid@')); // false
-console.log(isEmail('no-at-sign.com')); // false
-console.log(isEmail('user@domain.co.uk')); // true
-```
+// Simple email validation
+if (isEmail('user@example.com')) {
+  console.log('Valid email!');
+}
 
-#### Option: `allowPlusAddressing`
-
-Controls whether email addresses with plus signs (e.g., `user+tag@example.com`) are allowed.
-```javascript
-// Default: true (plus addressing allowed)
-console.log(isEmail('user+newsletter@example.com')); // true
-
-// Disable plus addressing
-console.log(isEmail('user+newsletter@example.com', {
-  allowPlusAddressing: false
-})); // false
-
-console.log(isEmail('user@example.com', {
-  allowPlusAddressing: false
-})); // true (no plus sign, so it's valid)
-```
-
-#### Option: `requireTLD`
-
-Controls whether a top-level domain (like `.com`, `.org`) is required.
-```javascript
-// Default: true (TLD required)
-console.log(isEmail('user@localhost')); // false
-
-// Allow emails without TLD (useful for local development)
-console.log(isEmail('user@localhost', {
-  requireTLD: false
-})); // true
-
-console.log(isEmail('admin@server', {
-  requireTLD: false
-})); // true
-```
-
-#### Option: `blockedDomains`
-
-Blocks specific domains from being considered valid.
-```javascript
-// Block temporary email providers
-console.log(isEmail('user@tempmail.com', {
-  blockedDomains: ['tempmail.com', '10minutemail.com']
-})); // false
-
-console.log(isEmail('user@gmail.com', {
-  blockedDomains: ['tempmail.com', '10minutemail.com']
-})); // true
-
-// Block multiple domains
-console.log(isEmail('test@spam.org', {
-  blockedDomains: ['spam.org', 'trash.com', 'throwaway.email']
-})); // false
-```
-
-#### Option: `details`
-
-Returns detailed validation information instead of just true/false.
-```javascript
-// Get detailed validation result
-const result = isEmail('user@example.com', { details: true });
-console.log(result);
-// Output:
-// {
-//   valid: true,
-//   errors: null,
-//   email: 'user@example.com',
-//   localPart: 'user',
-//   domain: 'example.com'
-// }
-
-// Detailed result for invalid email
-const invalid = isEmail('invalid@', { details: true });
-console.log(invalid);
-// Output:
-// {
-//   valid: false,
-//   errors: ['Domain cannot be empty'],
-//   email: 'invalid@',
-//   localPart: 'invalid',
-//   domain: ''
-// }
-
-// Multiple errors example
-const multiError = isEmail('..user@-example-.com', { details: true });
-console.log(multiError);
-// Output:
-// {
-//   valid: false,
-//   errors: [
-//     'Local part cannot start or end with a dot',
-//     'Local part cannot contain consecutive dots',
-//     'Domain cannot start or end with a dot or hyphen'
-//   ],
-//   email: '..user@-example-.com',
-//   localPart: '..user',
-//   domain: '-example-.com'
-// }
-```
-
-#### Combining multiple options
-```javascript
-// Strict validation for production
-const strictResult = isEmail('user+test@tempmail.com', {
-  allowPlusAddressing: false,
-  requireTLD: true,
-  blockedDomains: ['tempmail.com', '10minutemail.com'],
+// Advanced validation with options
+const result = isEmail('user@example.com', {
+  blockedDomains: ['tempmail.com'],
   details: true
 });
-console.log(strictResult);
-// Output:
-// {
-//   valid: false,
-//   errors: [
-//     'Plus addressing is not allowed',
-//     'This domain is not allowed'
-//   ],
-//   email: 'user+test@tempmail.com',
-//   localPart: 'user+test',
-//   domain: 'tempmail.com'
-// }
 
-// Lenient validation for development
-console.log(isEmail('admin@localhost', {
-  allowPlusAddressing: true,
-  requireTLD: false,
-  blockedDomains: []
-})); // true
+if (!result.valid) {
+  console.log('Errors:', result.errors);
+}
 ```
 
-#### Real-world examples
+## 📚 Documentation
+
+### Current Validators
+
+#### ✉️ Email Validation
+
+Validate email addresses with customizable rules:
 ```javascript
-// Registration form validation
-function validateRegistrationEmail(email) {
+isEmail(email, {
+  allowPlusAddressing: true,    // Allow user+tag@domain.com
+  requireTLD: true,              // Require .com, .org, etc.
+  blockedDomains: [],            // Block specific domains
+  details: false                 // Get detailed error messages
+});
+```
+
+**Examples:**
+```javascript
+// Block temporary email services
+isEmail('user@tempmail.com', {
+  blockedDomains: ['tempmail.com', '10minutemail.com']
+}); // false
+
+// Allow local emails (for development)
+isEmail('admin@localhost', {
+  requireTLD: false
+}); // true
+
+// Get detailed validation info
+isEmail('invalid@', { details: true });
+// Returns: { valid: false, errors: ['Domain cannot be empty'], ... }
+```
+
+### 🔜 Coming Soon
+
+- 🔑 **Password Validation** - Strength checking, common password detection
+- 👤 **Username Validation** - Length, character, and reserved name checks
+- 📱 **Phone Number Validation** - International format support
+- 🔢 **PIN/OTP Validation** - Verification code validation
+- 🛡️ **Security Helpers** - Breach detection, entropy calculation
+
+<!-- [See full documentation →](https://github.com/yourusername/validauth/wiki) -->
+
+## 💡 Use Cases
+
+### Registration Forms
+```javascript
+const { isEmail } = require('validauth');
+
+function validateRegistration(email, password) {
+  // Validate email
+  const emailResult = isEmail(email, {
+    allowPlusAddressing: false,
+    blockedDomains: ['tempmail.com', 'throwaway.email'],
+    details: true
+  });
+  
+  if (!emailResult.valid) {
+    return { success: false, errors: emailResult.errors };
+  }
+  
+  // More validation...
+  return { success: true };
+}
+```
+
+### Login Forms
+```javascript
+function validateLogin(email) {
+  // Quick validation without strict rules
+  return isEmail(email);
+}
+```
+
+### Newsletter Signups
+```javascript
+function validateNewsletter(email) {
+  // Allow plus addressing for filtering
   return isEmail(email, {
-    allowPlusAddressing: false, // Prevent abuse
-    requireTLD: true,
-    blockedDomains: [
-      'tempmail.com',
-      '10minutemail.com',
-      'guerrillamail.com',
-      'mailinator.com'
-    ],
+    allowPlusAddressing: true,
     details: true
   });
 }
-
-const registration = validateRegistrationEmail('user+spam@tempmail.com');
-if (!registration.valid) {
-  console.log('Registration failed:', registration.errors);
-  // Output: Registration failed: ['Plus addressing is not allowed', 'This domain is not allowed']
-}
-
-// Newsletter signup (more lenient)
-function validateNewsletterEmail(email) {
-  return isEmail(email, {
-    allowPlusAddressing: true, // Allow users to filter emails
-    requireTLD: true,
-    details: false
-  });
-}
-
-console.log(validateNewsletterEmail('user+newsletter@gmail.com')); // true
-
-// Internal email validation (local network)
-function validateInternalEmail(email) {
-  return isEmail(email, {
-    requireTLD: false, // Allow @localhost, @server, etc.
-    details: false
-  });
-}
-
-console.log(validateInternalEmail('admin@localhost')); // true
-console.log(validateInternalEmail('user@mailserver')); // true
 ```
 
-## API
-
-### `isEmail(email, options)`
-
-Validates an email address.
-
-**Parameters:**
-- `email` (string) - Email address to validate
-- `options` (object) - Optional validation options
-  - `allowPlusAddressing` (boolean) - Allow + in email addresses. Default: `true`
-  - `requireTLD` (boolean) - Require top-level domain (.com, .org, etc.). Default: `true`
-  - `blockedDomains` (array) - List of domain names to block. Default: `[]`
-  - `details` (boolean) - Return detailed validation result object. Default: `false`
-
-**Returns:** 
-- `boolean` - When `details: false` (default)
-- `object` - When `details: true`:
+### Internal/Development Environments
 ```javascript
-  {
-    valid: boolean,
-    errors: string[] | null,
-    email: string,
-    localPart: string,
-    domain: string
-  }
+function validateInternalEmail(email) {
+  // Allow emails without TLD (admin@localhost)
+  return isEmail(email, {
+    requireTLD: false
+  });
+}
 ```
 
-## Error Messages
+## 🎯 Why validauth?
 
-When using `details: true`, you may receive the following error messages:
+### Before validauth:
+```javascript
+// Complex regex, hard to maintain
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!emailRegex.test(email)) {
+  return 'Invalid email';
+}
 
-- `'Email must be a non-empty string'`
-- `'Email cannot be empty'`
-- `'Email is too long (max 254 characters)'`
-- `'Email must contain @ symbol'`
-- `'Email must contain exactly one @ symbol'`
-- `'Local part cannot be empty'`
-- `'Local part is too long (max 64 characters)'`
-- `'Local part cannot start or end with a dot'`
-- `'Local part cannot contain consecutive dots'`
-- `'Plus addressing is not allowed'`
-- `'Local part contains invalid characters'`
-- `'Domain cannot be empty'`
-- `'Domain is too long (max 253 characters)'`
-- `'Domain must have a TLD (e.g., .com, .org)'`
-- `'Domain cannot start or end with a dot or hyphen'`
-- `'Domain cannot contain consecutive dots'`
-- `'Domain contains invalid characters'`
-- `'This domain is not allowed'`
+// No customization, no detailed errors
+// Security checks done manually
+if (email.includes('tempmail.com')) {
+  return 'Temporary emails not allowed';
+}
+```
 
-## License
+### After validauth:
+```javascript
+const result = isEmail(email, {
+  blockedDomains: ['tempmail.com'],
+  details: true
+});
 
-MIT
+if (!result.valid) {
+  return result.errors; // Clear, detailed error messages
+}
+```
+
+## 🏗️ Project Status
+
+validauth is actively developed and maintained. We're working on adding more validators and features based on community feedback.
+
+**Current version:** 1.0.0  
+**Status:** ✅ Stable
+
+### Roadmap
+
+- [x] Email validation
+- [ ] Password validation
+- [ ] Username validation
+- [ ] Phone number validation
+- [ ] TypeScript definitions
+- [ ] React hooks
+- [ ] Vue composables
+- [ ] Framework integrations (Express, Fastify)
+
+## 🤝 Contributing
+
+Contributions are welcome! Whether it's:
+
+- 🐛 Bug reports
+- 💡 Feature requests
+- 📖 Documentation improvements
+- 🔧 Code contributions
+
+<!-- Please read our [Contributing Guide](CONTRIBUTING.md) to get started. -->
+
+### Development Setup
+```bash
+# Clone the repository
+git clone https://github.com/Adiksuu/validauth.git
+cd validauth
+
+# Install dependencies
+npm install
+
+# Run tests
+npm test
+
+# Run examples
+node test.js
+```
+
+## 📄 License
+
+MIT © [Adiksuu]
+
+See [LICENSE](MIT) for details.
+
+## 🙏 Acknowledgments
+
+- Inspired by the need for better authentication validation in modern web apps
+- Built with ❤️ for the JavaScript community
+
+## 📞 Support
+
+- 📧 Email: codeadiksuu@gmail.com
+- 💬 Issues: [GitHub Issues](https://github.com/Adiksuu/validauth/issues)
+
+---
+
+**Made with ❤️ by [Adiksuu]**
+
+⭐ Star this repo if you find it useful!
