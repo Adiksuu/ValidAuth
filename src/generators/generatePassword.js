@@ -10,7 +10,7 @@
  */
 import { getPasswordStrength } from "../validators/password.js";
 
-export function generatePassword({ options = {} }) {
+export function generatePassword(options = {}) {
     // Default options
     const defaults = {
         length: 12,
