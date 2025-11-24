@@ -1,3 +1,7 @@
+<img width="100%" alt="image" src="https://github.com/user-attachments/assets/6a9976c5-aa77-4e71-b9d6-834273010a28" />
+
+### OFFICIAL DOCUMENTATION: https://validauth.netlify.app
+
 # 🔐 validauth
 
 > Lightweight, powerful authentication validators for JavaScript applications
