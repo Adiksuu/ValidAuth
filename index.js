@@ -10,6 +10,12 @@ import { isOTP } from "./src/validators/otp.js";
 import { generatePassword } from "./src/generators/generatePassword.js";
 // Import generateOTP module.
 import { generateOTP } from "./src/generators/generateOTP.js";
+// Import generateSessionToken module.
+import { generateSessionToken } from "./src/generators/generateSessionToken.js";
+// Import isSessionTokenValid module.
+import { isSessionTokenValid } from "./src/validators/sessionToken.js";
+// Import isXSSSafe module.
+import { isXSSSafe } from "./src/validators/xss.js";
 
 // Export validator modules.
-export { isEmail, isPassword, getPasswordStrength, isUsername, isPasswordMatch, isOTP, generatePassword, generateOTP };
+export { isEmail, isPassword, getPasswordStrength, isUsername, isPasswordMatch, isOTP, generatePassword, generateOTP, generateSessionToken, isSessionTokenValid, isXSSSafe };

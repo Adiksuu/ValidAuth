@@ -216,7 +216,6 @@ console.log(strength);
 ### 🔜 Coming Soon
 
 - 📱 **Phone Number Validation** - International format support
-- 🔢 **PIN/OTP Validation** - Verification code validation
 - 🧹 **Sanitizers** - Clean and format input data
 - 🛡️ **Breach Detection** - Check against Have I Been Pwned database
 - 📝 **TypeScript Definitions** - Full TypeScript support
@@ -419,7 +418,7 @@ if (!usernameResult.valid) return usernameResult.errors;
 
 validauth is actively developed and maintained. We're working on adding more validators and features based on community feedback.
 
-**Current version:** 1.3.1  
+**Current version:** 1.3.2  
 **Status:** ✅ Stable
 
 ### Roadmap
@@ -432,6 +431,9 @@ validauth is actively developed and maintained. We're working on adding more val
 - [x] Password generator
 - [x] PIN/OTP validation
 - [x] OTP generator
+- [x] Session token generator
+- [x] Session token validator
+- [x] XSS protection
 - [ ] Phone number validation
 - [ ] Sanitizers and formatters
 - [ ] TypeScript definitions
