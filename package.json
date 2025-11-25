@@ -1,6 +1,6 @@
 {
     "name": "validauth",
-    "version": "1.3.2",
+    "version": "1.3.3",
     "description": "Authentication validators for email, password, username and more",
     "main": "index.js",
     "files": [
