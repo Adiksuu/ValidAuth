@@ -28,84 +28,37 @@ export function isUsername(username, options = {}) {
 
     // Basic validation.
     if (!username || typeof username !== "string") {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: ["Username must be a non-empty string"],
-            };
-        }
-        return false;
+        errors.push("Username must be a non-empty string");
+    } else {
+        // Remove whitespace characters
+        username = username.trim();
     }
-    // Remove whitespace characters
-    username = username.trim();
 
     // Check username length
-    if (username.length < opts.minLength) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: [
-                    `Username must be at least ${opts.minLength} characters long`,
-                ],
-            };
-        }
-        return false;
+    if (typeof username === "string" && username.trim().length < opts.minLength) {
+        errors.push(`Username must be at least ${opts.minLength} characters long`);
     }
-    if (username.length > opts.maxLength) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: [
-                    `Username must be no more than ${opts.maxLength} characters long`,
-                ],
-            };
-        }
-        return false;
+    if (typeof username === "string" && username.trim().length > opts.maxLength) {
+        errors.push(`Username must be no more than ${opts.maxLength} characters long`);
     }
 
     // Check for spaces
-    if (opts.forbidSpaces && /\s/.test(username)) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: ["Username cannot contain spaces"],
-            };
-        }
-        return false;
+    if (opts.forbidSpaces && typeof username === "string" && /\s/.test(username.trim())) {
+        errors.push("Username cannot contain spaces");
     }
     // Check for special characters
-    if (!opts.allowSpecialChars && /[!@#$%^&*(),.?":{}|<>]/.test(username)) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: [
-                    "Username cannot contain special characters",
-                ],
-            };
-        }
-        return false;
+    if (!opts.allowSpecialChars && typeof username === "string" && /[!@#$%^&*(),.?":{}|<>]/.test(username.trim())) {
+        errors.push("Username cannot contain special characters");
     }
 
     // Check if username starts with a number
-    if (opts.forbidStartingNumber && /^[0-9]/.test(username)) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: ["Username cannot start with a number"],
-            };
-        }
-        return false;
+    if (opts.forbidStartingNumber && typeof username === "string" && /^[0-9]/.test(username.trim())) {
+        errors.push("Username cannot start with a number");
     }
 
     // Check for blocked usernames
-    if (opts.blockedUsernames.includes(username.toLowerCase())) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: ["This username is not allowed"],
-            };
-        }
-        return false;
+    if (typeof username === "string" && opts.blockedUsernames.includes(username.toLowerCase())) {
+        errors.push("This username is not allowed");
     }
 
     // Return value

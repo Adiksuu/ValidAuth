@@ -31,98 +31,47 @@ export function isPassword(password, options = {}) {
 
     // Basic validation.
     if (!password || typeof password !== "string") {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: ["Password must be a non-empty string"],
-            };
-        }
-        return false;
+        errors.push("Password must be a non-empty string");
+    } else {
+        // Remove whitespace characters
+        password = password.trim();
     }
-
-    // Remove whitespace characters
-    password = password.trim();
 
     // Check password length
-    if (password.length < opts.minLength) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: [
-                    `Password must be at least ${opts.minLength} characters long`,
-                ],
-            };
-        }
-        return false;
+    if (typeof password === "string" && password.length < opts.minLength) {
+        errors.push(`Password must be at least ${opts.minLength} characters long`);
     }
-    if (password.length > opts.maxLength) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: [
-                    `Password must be at most ${opts.maxLength} characters long`,
-                ],
-            };
-        }
-        return false;
+    if (typeof password === "string" && password.length > opts.maxLength) {
+        errors.push(`Password must be at most ${opts.maxLength} characters long`);
     }
 
     // Check if password contains uppercase letters
-    if (opts.requireUppercase && !/[A-Z]/.test(password)) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: ["Password must contain at least one uppercase letter"],
-            };
-        }
-        return false;
+    if (opts.requireUppercase && typeof password === "string" && !/[A-Z]/.test(password)) {
+        errors.push("Password must contain at least one uppercase letter");
     }
 
     // Check if password contains lowercase letters
-    if (opts.requireLowercase && !/[a-z]/.test(password)) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: ["Password must contain at least one lowercase letter"],
-            };
-        }
-        return false;
+    if (opts.requireLowercase && typeof password === "string" && !/[a-z]/.test(password)) {
+        errors.push("Password must contain at least one lowercase letter");
     }
 
     // Check if password contains numbers
-    if (opts.requireNumbers && !/[0-9]/.test(password)) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: ["Password must contain at least one number"],
-            };
-        }
-        return false;
+    if (opts.requireNumbers && typeof password === "string" && !/[0-9]/.test(password)) {
+        errors.push("Password must contain at least one number");
     }
 
     // Check if password contains symbols
     if (
         opts.requireSymbols &&
+        typeof password === "string" &&
         !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]/.test(password)
     ) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: ["Password must contain at least one symbol"],
-            };
-        }
-        return false;
+        errors.push("Password must contain at least one symbol");
     }
 
     // Check if password contains common passwords
-    if (opts.forbidCommonPasswords && commonPasswords.has(password)) {
-        if (opts.details) {
-            return {
-                valid: false,
-                errors: ["Password cannot be a common password"],
-            };
-        }
-        return false;
+    if (opts.forbidCommonPasswords && typeof password === "string" && commonPasswords.has(password)) {
+        errors.push("Password cannot be a common password");
     }
 
     // Return value
@@ -285,22 +234,10 @@ export function isPasswordMatch(password, confirmPassword, options = {}) {
 
     // Basic validation.
     if (typeof password !== "string" || typeof confirmPassword !== "string") {
-        if (opts.details) {
-            return {
-                match: false,
-                errors: ["Both passwords must be strings"],
-            };
-        }
-        return false;
+        errors.push("Both passwords must be strings");
     }
     if (password !== confirmPassword) {
-        if (opts.details) {
-            return {
-                match: false,
-                errors: ["Passwords do not match"],
-            };
-        }
-        return false;
+        errors.push("Passwords do not match");
     }
 
     // Return value

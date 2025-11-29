@@ -16,10 +16,7 @@ export function isXSSSafe(input, options = {}) {
 
     // Basic validation
     if (!input || typeof input !== 'string') {
-        if (opts.details) {
-            return { safe: false, errors: ['Input must be a non-empty string'] };
-        }
-        return false;
+        errors.push('Input must be a non-empty string');
     }
 
     // Common XSS patterns to detect

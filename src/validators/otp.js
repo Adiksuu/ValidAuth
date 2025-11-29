@@ -24,34 +24,16 @@
    
    // Max attempts validation
    if (opts.maxAttempts <= 0) {
-     if (opts.details) {
-       return {
-         valid: false,
-         errors: ['Max attempts must be greater than 0.'],
-       };
-     }
-     return false;
+     errors.push('Max attempts must be greater than 0.');
    }
-   
+
    // OTP validation
    if (otp !== correctOTP) {
-     if (opts.details) {
-       return {
-         valid: false,
-         errors: ['Invalid OTP.'],
-       };
-     }
-     return false;
+     errors.push('Invalid OTP.');
    }
-   
+
    if (opts.attempts > opts.maxAttempts) {
-     if (opts.details) {
-       return {
-         valid: false,
-         errors: ['Max attempts exceeded.'],
-       };
-     }
-     return false;
+     errors.push('Max attempts exceeded.');
    }
    
    // Return value

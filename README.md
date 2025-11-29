@@ -418,7 +418,7 @@ if (!usernameResult.valid) return usernameResult.errors;
 
 validauth is actively developed and maintained. We're working on adding more validators and features based on community feedback.
 
-**Current version:** 1.3.2  
+**Current version:** 1.3.4  
 **Status:** ✅ Stable
 
 ### Roadmap

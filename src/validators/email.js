@@ -23,128 +23,109 @@ export function isEmail(email, options = {}) {
 
   // Basic validation.
   if (!email || typeof email !== "string") {
-    if (opts.details) {
-      return { valid: false, errors: ["Email must be a non-empty string"] };
-    }
-    return false;
+    errors.push("Email must be a non-empty string");
+  } else {
+    // Remove whitespace characters
+    email = email.trim();
   }
-
-  // Remove whitespace characters
-  email = email.trim();
 
   // Check email length
-  if (email.length === 0) {
-    if (opts.details) {
-      return { valid: false, errors: ["Email cannot be empty"] };
-    }
-    return false;
+  if (typeof email === "string" && email.length === 0) {
+    errors.push("Email cannot be empty");
   }
-
-  if (email.length > 254) {
-    if (opts.details) {
-      return {
-        valid: false,
-        errors: ["Email exceeds maximum length (max 254 characters)"],
-      };
-    }
-    return false;
+  if (typeof email === "string" && email.length > 254) {
+    errors.push("Email exceeds maximum length (max 254 characters)");
   }
 
   // Check if email contains "@"
-  if (!email.includes("@")) {
-    if (opts.details) {
-      return { valid: false, errors: ['Email must contain "@" symbol'] };
-    }
-    return false;
+  if (typeof email === "string" && !email.includes("@")) {
+    errors.push('Email must contain "@" symbol');
   }
 
   // Split email to local and domain
-  const parts = email.split("@");
+  let localPart = "";
+  let domain = "";
+  if (typeof email === "string") {
+    const parts = email.split("@");
+    if (parts.length !== 2) {
+      errors.push('Email must contain exactly one "@" symbol');
+    } else {
+      [localPart, domain] = parts;
 
-  if (parts.length !== 2) {
-    if (opts.details) {
-      return {
-        valid: false,
-        errors: ['Email must contain exactly one "@" symbol'],
-      };
-    }
-    return false;
-  }
+      // Validate local part
+      if (localPart.length === 0) {
+        errors.push("Email local part cannot be empty");
+      }
+      if (localPart.length > 64) {
+        errors.push("Email local part exceeds maximum length (max 64 characters)");
+      }
 
-  const [localPart, domain] = parts;
+      // Check if local part starts/ends with dot
+      if (localPart.startsWith(".") || localPart.endsWith(".")) {
+        errors.push("Email local part cannot start or end with a dot");
+      }
 
-  // Validate local part
-  if (localPart.length === 0) {
-    errors.push("Email local part cannot be empty");
-  }
-  if (localPart.length > 64) {
-    errors.push("Email local part exceeds maximum length (max 64 characters)");
-  }
+      // Check if local part contains consecutive dots
+      if (localPart.includes("..")) {
+        errors.push("Email local part cannot contain consecutive dots");
+      }
 
-  // Check if local part starts/ends with dot
-  if (localPart.startsWith(".") || localPart.endsWith(".")) {
-    errors.push("Email local part cannot start or end with a dot");
-  }
+      // Check "+" addressing if not allowed
+      if (!opts.allowPlusAddressing && localPart.includes("+")) {
+        errors.push('Email local part cannot contain "+" symbol');
+      }
 
-  // Check if local part contains consecutive dots
-  if (localPart.includes("..")) {
-    errors.push("Email local part cannot contain consecutive dots");
-  }
+      // Basic character validation in local part
+      const localPartRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+$/;
+      if (!localPartRegex.test(localPart.replace(/\+.*$/, ""))) {
+        errors.push("Email local part contains invalid characters");
+      }
 
-  // Check "+" addressing if not allowed
-  if (!opts.allowPlusAddressing && localPart.includes("+")) {
-    errors.push('Email local part cannot contain "+" symbol');
-  }
+      // Domain validation
+      if (domain.length === 0) {
+        errors.push("Domain cannot be empty");
+      }
+      if (domain.length > 253) {
+        errors.push("Domain exceeds maximum length (max 253 characters)");
+      }
 
-  // Basic character validation in local part
-  const localPartRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+$/;
-  if (!localPartRegex.test(localPart.replace(/\+.*$/, ""))) {
-    errors.push("Email local part contains invalid characters");
-  }
+      // Check if domain contains TLD
+      if (opts.requireTLD && !domain.includes(".")) {
+        errors.push("Domain must contain a top-level domain (e.g., .com, .org)");
+      }
 
-  // Domain validation
-  if (domain.length === 0) {
-    errors.push("Domain cannot be empty");
-  }
-  if (domain.length > 253) {
-    errors.push("Domain exceeds maximum length (max 253 characters)");
-  }
+      // Check if domain starts/ends with dot or hyphen
+      if (
+        domain.startsWith(".") ||
+        domain.endsWith(".") ||
+        domain.startsWith("-") ||
+        domain.endsWith("-")
+      ) {
+        errors.push("Domain cannot start or end with a dot or hyphen");
+      }
 
-  // Check if domain contains TLD
-  if (opts.requireTLD && !domain.includes(".")) {
-    errors.push("Domain must contain a top-level domain (e.g., .com, .org)");
-  }
+      // Check if domain contains consecutive dots
+      if (domain.includes("..")) {
+        errors.push("Domain cannot contain consecutive dots");
+      }
 
-  // Check if domain starts/ends with dot or hyphen
-  if (
-    domain.startsWith(".") ||
-    domain.endsWith(".") ||
-    domain.startsWith("-") ||
-    domain.endsWith("-")
-  ) {
-    errors.push("Domain cannot start or end with a dot or hyphen");
-  }
+      // Basic character validation in domain
+      const domainRegex = /^[a-zA-Z0-9.-]+$/;
+      if (!domainRegex.test(domain)) {
+        errors.push("Domain contains invalid characters");
+      }
 
-  // Check if domain contains consecutive dots
-  if (domain.includes("..")) {
-    errors.push("Domain cannot contain consecutive dots");
-  }
-
-  // Basic character validation in domain
-  const domainRegex = /^[a-zA-Z0-9.-]+$/;
-  if (!domainRegex.test(domain)) {
-    errors.push("Domain contains invalid characters");
-  }
-
-  // Check blocked domains
-  if (opts.blockedDomains.length > 0) {
-    const domainLower = domain.toLowerCase();
-    if (
-      opts.blockedDomains.some(
-        (blocked) => domainLower === blocked.toLowerCase(),
-      )
-    ) {
-      errors.push("This domain is not allowed to use");
+      // Check blocked domains
+      if (opts.blockedDomains.length > 0) {
+        const domainLower = domain.toLowerCase();
+        if (
+          opts.blockedDomains.some(
+            (blocked) => domainLower === blocked.toLowerCase(),
+          )
+        ) {
+          errors.push("This domain is not allowed to use");
+        }
+      }
     }
   }
 
